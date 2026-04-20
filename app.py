@@ -139,12 +139,19 @@ st.caption("Kategori berdasarkan acuan FDA:")
 
 if total <= 40:
     st.success("🟢 Rendah kalori")
+    st.balloons()
+
 elif total <= 100:
     st.warning("🟡 Kalori sedang")
+    st.info("👍 Masih cukup aman dikonsumsi")
+
 elif total >= 400:
-    st.error("🔴 Tinggi kalori")
+    st.error("🔴 Kalori tinggi")
+    st.snow()
+    st.warning("⚠️ Konsumsi secukupnya agar tetap seimbang")
+
 else:
-    st.info("🟠 Di antara kategori sedang dan tinggi")
+    st.info("🟠 Kalori menengah")
 
 # =========================
 # BAR LEVEL KALORI
