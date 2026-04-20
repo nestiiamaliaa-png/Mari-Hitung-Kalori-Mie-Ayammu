@@ -147,6 +147,22 @@ else:
     st.info("🟠 Di antara kategori sedang dan tinggi")
 
 # =========================
+# BAR LEVEL KALORI
+# Tempel setelah kategori
+# =========================
+st.write("### 📊 Level Kalori")
+
+level = min(int(total / 5), 100)
+st.progress(level)
+
+if level < 30:
+    st.caption("🍃 Ringan")
+elif level < 70:
+    st.caption("⚡ Sedang")
+else:
+    st.caption("🔥 Tinggi")
+
+# =========================
 # GRAFIK
 # =========================
 st.subheader("📊 Distribusi Kalori")
