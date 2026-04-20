@@ -4,8 +4,8 @@ import pandas as pd
 
 st.set_page_config(page_title="Hitung Kalori Mie Ayam", page_icon="🍜")
 
-st.title("🍜 Berapa Kalori Mie Ayam yang Kamu Makan Hari Ini?")
-st.markdown("### Siapa sangka ternyata kita bisa menghitung kalori mie ayam menggunakan konsep integral dalam kehidupan nyata ✨")
+st.title("🍜 CalcuBowl - Hitung Kalori Mie Ayam Kamu Hari Ini")
+st.markdown("### 🥢 CalcuBowl | Smart Food Calorie Calculator berbasis konsep integral")
 
 st.write("---")
 
