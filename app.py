@@ -1,85 +1,49 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+import pandas as pd
 
-st.set_page_config(page_title="Hitung Kalori Mie Ayam", page_icon="🍜")
+st.set_page_config(page_title="Hitung Kalori Mie Ayam", page_icon="🍜", layout="centered")
 
-st.title("🍜 Berapa Kalori Mie Ayam yang Kamu Makan Hari Ini?")
-st.markdown("### Siapa sangka ternyata kita bisa menghitung kalori mie ayam menggunakan konsep integral dalam kehidupan nyata ✨")
+st.title("🍜 Hitung Kalori Mie Ayam")
+st.markdown("### Virtual Lab Matematika: Menghitung kalori mie ayam dengan konsep integral ✨")
 
 st.write("---")
 
 # =========================
 # INPUT DASAR
 # =========================
-porsi = st.number_input("🍽️ Jumlah mangkok/porsi", 1, 10, 1)
-
-mie_option = st.selectbox("🍜 Jumlah mie (dalam gram)", ["100", "200", "300", "400", "500", "lebih"])
-if mie_option == "lebih":
-    mie_val = st.number_input("Masukkan gram mie:", 500, 1000, 600)
-else:
-    mie_val = int(mie_option)
+porsi = st.number_input("🍽️ Jumlah porsi", min_value=1, max_value=10, value=1)
+mie = st.slider("🍜 Berat mie (gram)", 50, 500, 100, step=10)
 
 # =========================
-# FUNGSI INPUT FLEXIBLE
+# FUNGSI INPUT
 # =========================
-def input_flex(label, opsi, min_val=1):
-    pilihan = st.selectbox(label, opsi)
-    if pilihan == "lebih":
-        return st.number_input(
-            f"Masukkan jumlah {label}",
-            min_value=float(min_val),
-            max_value=100.0,
-            value=float(min_val),
-            step=0.5
-        )
-    return float(pilihan)
-
-input_fleksibel = input_flex
+def jumlah_item(label, min_val=0.0, max_val=10.0, default=0.0):
+    return st.number_input(label, min_value=min_val, max_value=max_val, value=default, step=0.5)
 
 # =========================
-# INPUT LAIN
+# INPUT KOMPONEN
 # =========================
-minyak = input_fleksibel("🛢️ Minyak ayam (sdm)", ["0.5","1","2","3","lebih"])
-
-st.subheader("🥬 Sayuran")
-sawi = input_fleksibel("Sawi (lembar)", ["1","2","3","lebih"], 1)
-daun_bawang = input_fleksibel("Daun bawang (sdm)", ["0.5","1","2","3","lebih"])
-
-st.subheader("🍗 Ayam")
-ayam = input_fleksibel("Ayam cincang (sdm)", ["1","2","3","4","5","lebih"], 1)
+st.subheader("🥬 Sayur & Protein")
+minyak = jumlah_item("Minyak ayam (sdm)", 0.0, 10.0, 1.0)
+sawi = jumlah_item("Sawi (lembar)", 0.0, 10.0, 1.0)
+daun_bawang = jumlah_item("Daun bawang (sdm)", 0.0, 10.0, 1.0)
+ayam = jumlah_item("Ayam cincang (sdm)", 0.0, 10.0, 1.0)
 
 st.subheader("🍢 Topping")
+ceker = jumlah_item("Ceker (buah)")
+bakso = jumlah_item("Bakso (buah)")
+telur_ayam = jumlah_item("Telur ayam (butir)")
+telur_puyuh = jumlah_item("Telur puyuh (butir)")
+krupuk = jumlah_item("Kerupuk pangsit (sdm)")
+bawang = jumlah_item("Bawang goreng (sdm)")
+acar = jumlah_item("Acar (sdm)")
 
-def topping_input(nama, opsi):
-    pakai = st.radio(f"{nama}?", ["Tidak", "Ya"], horizontal=True)
-    if pakai == "Ya":
-        return input_fleksibel(f"Jumlah {nama}", opsi)
-    return 0
-
-ceker = topping_input("Ceker 🍗", ["1","2","3","lebih"])
-bakso = topping_input("Bakso 🧆", ["1","2","3","lebih"])
-
-telur_pakai = st.radio("Telur?", ["Tidak", "Ya"], horizontal=True)
-telur_ayam = 0
-telur_puyuh = 0
-
-if telur_pakai == "Ya":
-    jenis = st.radio("Jenis telur", ["Telur Ayam 🥚", "Telur Puyuh 🐣"], horizontal=True)
-    jumlah = input_fleksibel("Jumlah telur", ["1","2","3","lebih"], 1)
-    if "Ayam" in jenis:
-        telur_ayam = jumlah
-    else:
-        telur_puyuh = jumlah
-
-krupuk = topping_input("Kerupuk pangsit (sdm)", ["1","2","3","lebih"])
-bawang = topping_input("Bawang goreng (sdm)", ["1","2","3","lebih"])
-acar = topping_input("Acar (sdm)", ["1","2","3","lebih"])
-
-st.subheader("🌶️ Saos")
-sambal = topping_input("Sambal (sdm)", ["0.5","1","2","3","4","5","lebih"])
-kecap = topping_input("Kecap (sdm)", ["0.5","1","2","3","4","5","lebih"])
-saos = topping_input("Saos tomat (sdm)", ["0.5","1","2","3","4","5","lebih"])
-chili_oil = topping_input("Chili Oil (sdm)", ["0.5","1","2","3","4","5","lebih"])
+st.subheader("🌶️ Saus")
+sambal = jumlah_item("Sambal (sdm)")
+kecap = jumlah_item("Kecap (sdm)")
+saos = jumlah_item("Saus tomat (sdm)")
+chili_oil = jumlah_item("Chili oil (sdm)")
 
 # =========================
 # DATA KALORI
@@ -104,35 +68,35 @@ kalori = {
 }
 
 # =========================
-# HITUNG
+# HITUNG KALORI
 # =========================
-detail = {}
-
-detail["Mie"] = mie_val * kalori["mie"]
-detail["Minyak ayam"] = minyak * kalori["minyak"]
-detail["Sawi"] = sawi * kalori["sawi"]
-detail["Daun bawang"] = daun_bawang * kalori["daun_bawang"]
-detail["Ayam cincang"] = ayam * kalori["ayam"]
-detail["Ceker"] = ceker * kalori["ceker"]
-detail["Bakso"] = bakso * kalori["bakso"]
-detail["Telur ayam"] = telur_ayam * kalori["telur_ayam"]
-detail["Telur puyuh"] = telur_puyuh * kalori["telur_puyuh"]
-detail["Kerupuk pangsit"] = krupuk * kalori["krupuk"]
-detail["Bawang goreng"] = bawang * kalori["bawang"]
-detail["Acar"] = acar * kalori["acar"]
-detail["Sambal"] = sambal * kalori["sambal"]
-detail["Kecap"] = kecap * kalori["kecap"]
-detail["Saos tomat"] = saos * kalori["saos"]
-detail["Chili Oil"] = chili_oil * kalori["chili_oil"]
+detail = {
+    "Mie": mie * kalori["mie"],
+    "Minyak ayam": minyak * kalori["minyak"],
+    "Sawi": sawi * kalori["sawi"],
+    "Daun bawang": daun_bawang * kalori["daun_bawang"],
+    "Ayam cincang": ayam * kalori["ayam"],
+    "Ceker": ceker * kalori["ceker"],
+    "Bakso": bakso * kalori["bakso"],
+    "Telur ayam": telur_ayam * kalori["telur_ayam"],
+    "Telur puyuh": telur_puyuh * kalori["telur_puyuh"],
+    "Kerupuk pangsit": krupuk * kalori["krupuk"],
+    "Bawang goreng": bawang * kalori["bawang"],
+    "Acar": acar * kalori["acar"],
+    "Sambal": sambal * kalori["sambal"],
+    "Kecap": kecap * kalori["kecap"],
+    "Saus tomat": saos * kalori["saos"],
+    "Chili oil": chili_oil * kalori["chili_oil"]
+}
 
 total = sum(detail.values()) * porsi
 
 # =========================
-# OUTPUT
+# OUTPUT TOTAL
 # =========================
 st.write("---")
 st.subheader("🔥 Total Kalori")
-st.success(f"{int(total)} kkal")
+st.success(f"{total:.2f} kkal")
 
 if total < 400:
     st.success("🟢 Rendah kalori")
@@ -142,52 +106,82 @@ else:
     st.error("🔴 Kalori tinggi")
 
 # =========================
+# TABEL DATA GIZI
+# =========================
+st.write("---")
+st.subheader("📋 Tabel Data Gizi & Kalori")
+
+rows = [
+    ["Mie", mie, 4.51*(mie/100), 25.01*(mie/100), 2.06*(mie/100), detail["Mie"]],
+    ["Minyak ayam", minyak, 0, 0, 9.98*minyak, detail["Minyak ayam"]],
+    ["Sawi", sawi, 0.41*sawi, 0.96*sawi, 0.45*sawi, detail["Sawi"]],
+    ["Daun bawang", daun_bawang, 0.15*daun_bawang, 1.42*daun_bawang, 0.03*daun_bawang, detail["Daun bawang"]],
+    ["Ayam cincang", ayam, 6.20*ayam, 0, 0.71*ayam, detail["Ayam cincang"]],
+    ["Ceker", ceker, 9.70*ceker, 0.10*ceker, 7.30*ceker, detail["Ceker"]],
+    ["Bakso", bakso, 4.12*bakso, 5.17*bakso, 4.76*bakso, detail["Bakso"]],
+    ["Telur ayam", telur_ayam, 5.51*telur_ayam, 0.49*telur_ayam, 4.65*telur_ayam, detail["Telur ayam"]],
+    ["Telur puyuh", telur_puyuh, 1.30*telur_puyuh, 0.04*telur_puyuh, 1.10*telur_puyuh, detail["Telur puyuh"]],
+    ["Kerupuk pangsit", krupuk, 1.26*krupuk, 3.05*krupuk, 1.89*krupuk, detail["Kerupuk pangsit"]],
+    ["Bawang goreng", bawang, 1*bawang, 5*bawang, 3*bawang, detail["Bawang goreng"]],
+    ["Acar", acar, 0.09*acar, 0.62*acar, 0.03*acar, detail["Acar"]],
+    ["Sambal", sambal, 0.50*sambal, 1.50*sambal, 0.75*sambal, detail["Sambal"]],
+    ["Kecap", kecap, 0.13*kecap, 7.64*kecap, 0, detail["Kecap"]],
+    ["Saus tomat", saos, 0.17*saos, 2.51*saos, 0.04*saos, detail["Saus tomat"]],
+    ["Chili oil", chili_oil, 0.07*chili_oil, 0.30*chili_oil, 9.45*chili_oil, detail["Chili oil"]],
+]
+
+df = pd.DataFrame(rows, columns=["Komponen", "Jumlah", "Protein (g)", "Karbo (g)", "Lemak (g)", "Kalori (kkal)"])
+df = df[df["Jumlah"] > 0]
+
+st.dataframe(df, use_container_width=True)
+
+# =========================
+# TOTAL GIZI
+# =========================
+st.write("### 🔢 Total Gizi")
+
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Protein", f"{df['Protein (g)'].sum():.2f} g")
+col2.metric("Karbo", f"{df['Karbo (g)'].sum():.2f} g")
+col3.metric("Lemak", f"{df['Lemak (g)'].sum():.2f} g")
+col4.metric("Kalori", f"{total:.2f} kkal")
+
+# =========================
 # GRAFIK
 # =========================
+st.write("---")
 st.subheader("📊 Distribusi Kalori")
+
+filtered = {k: v for k, v in detail.items() if v > 0}
+
 fig, ax = plt.subplots(figsize=(8,8))
-ax.pie(detail.values(), labels=detail.keys(), autopct='%1.1f%%')
+ax.pie(filtered.values(), labels=filtered.keys(), autopct='%1.1f%%')
 st.pyplot(fig)
 
 # =========================
 # PENJELASAN INTEGRAL
 # =========================
 st.write("---")
-st.subheader("📘 Pendekatan Integral")
+st.subheader("📘 Konsep Integral")
 
-st.latex(r"E = \int_{0}^{m} \left(4P + 4K + 9L\right)\,dx")
+st.latex(r"E = \int_{0}^{m}(4P + 4K + 9L)\,dx")
 
 st.markdown("""
-### Keterangan:
-- **E** = energi total (kkal)  
-- **m** = massa bahan makanan (gram)  
-- **P** = kandungan protein per gram  
-- **K** = kandungan karbohidrat per gram  
-- **L** = kandungan lemak per gram  
+**Keterangan:**
+- **E** = Energi total (kkal)  
+- **m** = Massa makanan (gram)  
+- **P** = Protein per gram  
+- **K** = Karbohidrat per gram  
+- **L** = Lemak per gram  
 
-### Acuan Nilai Kalori Makronutrien:
+### Acuan Faktor Atwater:
 - 1 gram protein = **4 kkal**
 - 1 gram karbohidrat = **4 kkal**
 - 1 gram lemak = **9 kkal**
-
-(Acuan umum: **Atwater General Factor System**, digunakan dalam ilmu gizi internasional)
 """)
 
-st.markdown(f"""
-### Contoh pada mie {mie_val} gram:
-
-E = ∫₀^({mie_val}) (4P + 4K + 9L) dx
-
-Hasil energi mie = **{detail["Mie"]:.2f} kkal**
-
-### Total seluruh komponen:
-
-K_total = Σ Eᵢ
-
-Total kalori mie ayam = **{total:.2f} kkal**
-""")
-
-st.info("Integral digunakan untuk menjumlahkan kontribusi energi secara kontinu berdasarkan massa setiap komponen makanan.")
+st.info("Integral digunakan untuk menjumlahkan energi dari setiap gram bahan makanan secara kontinu.")
 
 st.write("---")
-st.caption("✨ Virtual Lab Matematika - Integral Kalori Mie Ayam 🚀")
+st.caption("✨ Virtual Lab Kalori Mie Ayam - Final Version 🚀")
