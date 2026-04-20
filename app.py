@@ -155,87 +155,81 @@ ax.pie(detail.values(), labels=detail.keys(), autopct='%1.1f%%')
 st.pyplot(fig)
 
 # =========================
-# TABEL DATA GIZI
+# TABEL DATA GIZI (SEMUA DATA ACUAN)
 # =========================
 st.write("---")
-st.subheader("📋 Tabel Data Gizi & Kalori")
+st.subheader("📋 Tabel Data Gizi & Kalori (Semua Komponen)")
 
-rows = []
+rows_all = []
 
 data_input = [
-    ("Mie", "100 g", 100, mie_val/100, detail["Mie"], 4.51, 25.01, 2.06,
-     "E_mie = ∫₀¹⁰⁰ (4(0.0451)+4(0.2501)+9(0.0206)) dx"),
-
-    ("Minyak ayam", "1 sdm", 10, minyak, detail["Minyak ayam"], 0.00, 0.00, 9.98,
-     "E_mb = ∫₀¹⁰ (9(0.998)) dx"),
-
-    ("Sawi", "1 lembar", 20, sawi, detail["Sawi"], 0.41, 0.96, 0.45,
-     "E_sawi = ∫₀²⁰ (4(0.025)+4(0.0481)+9(0.0224)) dx"),
-
-    ("Daun bawang", "1 sdm", 10, daun_bawang, detail["Daun bawang"], 0.15, 1.42, 0.03,
-     "E_db = ∫₀¹⁰ (4(0.015)+4(0.1415)+9(0.03)) dx"),
-
-    ("Ayam cincang", "1 sdm", 20, ayam, detail["Ayam cincang"], 6.20, 0.00, 0.71,
-     "E_ac = ∫₀²⁰ (4(0.3102)+9(0.0357)) dx"),
-
-    ("Ceker", "1 buah", 50, ceker, detail["Ceker"], 9.70, 0.10, 7.30,
-     "E_ceker = ∫₀⁵⁰ (4(0.194)+4(0.002)+9(0.146)) dx"),
-
-    ("Bakso", "1 buah", 30, bakso, detail["Bakso"], 4.12, 5.17, 4.76,
-     "E_bakso = ∫₀³⁰ (4(0.1374)+4(0.1723)+9(0.1588)) dx"),
-
-    ("Telur ayam", "1 butir", 60, telur_ayam, detail["Telur ayam"], 5.51, 0.49, 4.65,
-     "E_ta = ∫₀⁶⁰ (4(0.0918)+4(0.00817)+9(0.0775)) dx"),
-
-    ("Telur puyuh", "1 butir", 9, telur_puyuh, detail["Telur puyuh"], 1.30, 0.04, 1.10,
-     "E_tp = ∫₀⁹ (4(0.1444)+4(0.00444)+9(0.1222)) dx"),
-
-    ("Kerupuk pangsit", "1 sdm", 10, krupuk, detail["Kerupuk pangsit"], 1.26, 3.05, 1.89,
-     "E_kp = ∫₀¹⁰ (4(0.1258)+4(1.2188)+9(1.6983)) dx"),
-
-    ("Bawang goreng", "1 sdm", 10, bawang, detail["Bawang goreng"], 1.00, 5.00, 3.00,
-     "E_bg = ∫₀¹⁰ (4(0.1)+4(0.5)+9(0.3)) dx"),
-
-    ("Acar", "1 sdm", 15, acar, detail["Acar"], 0.09, 0.62, 0.03,
-     "E_acar = ∫₀¹⁵ (4(0.0062)+4(0.0412)+9(0.0019)) dx"),
-
-    ("Sambal", "1 sdm", 10, sambal, detail["Sambal"], 0.50, 1.50, 0.75,
-     "E_sambal = ∫₀¹⁰ (4(0.05)+4(0.15)+9(0.075)) dx"),
-
-    ("Saus tomat", "1 sdm", 10, saos, detail["Saos tomat"], 0.17, 2.51, 0.04,
-     "E_st = ∫₀¹⁰ (4(0.0174)+4(0.2508)+9(0.0342)) dx"),
-
-    ("Kecap", "1 sdm", 10, kecap, detail["Kecap"], 0.13, 7.64, 0.00,
-     "E_kecap = ∫₀¹⁰ (4(0.0128)+4(0.7643)+9(0.0001)) dx"),
-
-    ("Chili oil", "1 sdm", 10, chili_oil, detail["Chili Oil"], 0.07, 0.30, 9.45,
-     "E_co = ∫₀¹⁰ (4(0.007)+4(0.0302)+9(0.9453)) dx"),
+    (1,"Mie","100 g",100,mie_val/100,detail["Mie"],4.51,25.01,2.06,"E_mie = ∫₀¹⁰⁰ (4P+4K+9L) dx"),
+    (2,"Minyak ayam","1 sdm",10,minyak,detail["Minyak ayam"],0.00,0.00,9.98,"E_mb = ∫₀¹⁰ (9L) dx"),
+    (3,"Sawi","1 lembar",20,sawi,detail["Sawi"],0.41,0.96,0.45,"E_sawi = ∫₀²⁰ (4P+4K+9L) dx"),
+    (4,"Daun bawang","1 sdm",10,daun_bawang,detail["Daun bawang"],0.15,1.42,0.03,"E_db = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (5,"Ayam cincang","1 sdm",20,ayam,detail["Ayam cincang"],6.20,0.00,0.71,"E_ac = ∫₀²⁰ (4P+9L) dx"),
+    (6,"Ceker","1 buah",50,ceker,detail["Ceker"],9.70,0.10,7.30,"E_ceker = ∫₀⁵⁰ (4P+4K+9L) dx"),
+    (7,"Bakso","1 buah",30,bakso,detail["Bakso"],4.12,5.17,4.76,"E_bakso = ∫₀³⁰ (4P+4K+9L) dx"),
+    (8,"Telur ayam","1 butir",60,telur_ayam,detail["Telur ayam"],5.51,0.49,4.65,"E_ta = ∫₀⁶⁰ (4P+4K+9L) dx"),
+    (9,"Telur puyuh","1 butir",9,telur_puyuh,detail["Telur puyuh"],1.30,0.04,1.10,"E_tp = ∫₀⁹ (4P+4K+9L) dx"),
+    (10,"Kerupuk pangsit","1 sdm",10,krupuk,detail["Kerupuk pangsit"],1.26,3.05,1.89,"E_kp = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (11,"Bawang goreng","1 sdm",10,bawang,detail["Bawang goreng"],1.00,5.00,3.00,"E_bg = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (12,"Acar","1 sdm",15,acar,detail["Acar"],0.09,0.62,0.03,"E_acar = ∫₀¹⁵ (4P+4K+9L) dx"),
+    (13,"Sambal","1 sdm",10,sambal,detail["Sambal"],0.50,1.50,0.75,"E_sambal = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (14,"Saus tomat","1 sdm",10,saos,detail["Saos tomat"],0.17,2.51,0.04,"E_st = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (15,"Kecap","1 sdm",10,kecap,detail["Kecap"],0.13,7.64,0.00,"E_kecap = ∫₀¹⁰ (4P+4K) dx"),
+    (16,"Chili oil","1 sdm",10,chili_oil,detail["Chili Oil"],0.07,0.30,9.45,"E_co = ∫₀¹⁰ (4P+4K+9L) dx"),
 ]
 
-for nama, takaran, berat, qty, kal, p, k, l, integral in data_input:
-    rows.append({
+for no,nama,takaran,berat,qty,kal,p,k,l,integral in data_input:
+    rows_all.append({
+        "No": no,
         "Komponen": nama,
         "Takaran Pakai": takaran,
-        "Berat (g)": berat * qty,
-        "Protein (g)": round(p * qty, 2),
-        "Karbohidrat (g)": round(k * qty, 2),
-        "Lemak (g)": round(l * qty, 2),
+        "Berat (g)": berat,
+        "Protein (g)": p,
+        "Karbohidrat (g)": k,
+        "Lemak (g)": l,
         "Konsep Integral": integral,
-        "Kalori (kkal)": round(kal, 2)
+        "Kalori (kkal)": round(kal if nama=="Mie" else (4*p+4*k+9*l),2)
     })
 
-df = pd.DataFrame(rows)
+df_all = pd.DataFrame(rows_all)
+df_all.index = range(1, len(df_all)+1)
+st.dataframe(df_all, use_container_width=True)
 
-st.dataframe(df, use_container_width=True)
+# =========================
+# TABEL ITEM YANG DIPILIH USER
+# =========================
+st.subheader("🛒 Tabel Item yang Dipilih")
+
+rows_pilih = []
+
+for no,nama,takaran,berat,qty,kal,p,k,l,integral in data_input:
+    if qty > 0:
+        rows_pilih.append({
+            "No": no,
+            "Komponen": nama,
+            "Jumlah Dipilih": qty,
+            "Berat Total (g)": round(berat*qty,2),
+            "Protein (g)": round(p*qty,2),
+            "Karbohidrat (g)": round(k*qty,2),
+            "Lemak (g)": round(l*qty,2),
+            "Kalori (kkal)": round(kal,2)
+        })
+
+df_pilih = pd.DataFrame(rows_pilih)
+df_pilih.index = range(1, len(df_pilih)+1)
+st.dataframe(df_pilih, use_container_width=True)
 
 # =========================
 # TOTAL GIZI
 # =========================
 st.write("### 🔢 Total Gizi")
 
-total_protein = df["Protein (g)"].sum() * porsi
-total_karbo = df["Karbohidrat (g)"].sum() * porsi
-total_lemak = df["Lemak (g)"].sum() * porsi
+total_protein = df_pilih["Protein (g)"].sum() * porsi
+total_karbo = df_pilih["Karbohidrat (g)"].sum() * porsi
+total_lemak = df_pilih["Lemak (g)"].sum() * porsi
 
 col1, col2, col3, col4 = st.columns(4)
 
