@@ -40,7 +40,11 @@ input_fleksibel = input_flex
 # =========================
 # INPUT LAIN
 # =========================
+st.subheader("🧂 Bumbu Dasar")
 minyak = input_fleksibel("🛢️ Minyak ayam (sdm)", ["0.5","1","2","3","lebih"])
+micin = input_fleksibel("Micin (sdt)", ["0.5","1","2","3","lebih"])
+kecap_asin = input_fleksibel("Kecap asin (sdm)", ["0.5","1","2","3","lebih"])
+kecap_manis = input_fleksibel("Kecap manis (sdm)", ["0.5","1","2","3","lebih"])
 
 st.subheader("🥬 Sayuran")
 sawi = input_fleksibel("Sawi (lembar)", ["1","2","3","lebih"], 1)
@@ -83,6 +87,11 @@ saos = topping_input("Saos tomat (sdm)", ["0.5","1","2","3","4","5","lebih"])
 chili_oil = topping_input("Chili Oil (sdm)", ["0.5","1","2","3","4","5","lebih"])
 
 # =========================
+# INPUT TAMBAHAN
+# =========================
+kuah = input_fleksibel("Kuah kaldu ayam (porsi 200 ml)", ["1","2","3","lebih"])
+
+# =========================
 # DATA KALORI
 # =========================
 kalori = {
@@ -101,7 +110,11 @@ kalori = {
     "sambal": 14.75,
     "kecap": 31.09,
     "saos": 11.07,
-    "chili_oil": 86.57
+    "chili_oil": 86.57,
+    "micin": 0.00,
+    "kecap_asin": 8.00,
+    "kecap_manis": 31.09,
+    "kuah": 10.40
 }
 
 # =========================
@@ -122,9 +135,12 @@ detail["Kerupuk pangsit"] = krupuk * kalori["krupuk"]
 detail["Bawang goreng"] = bawang * kalori["bawang"]
 detail["Acar"] = acar * kalori["acar"]
 detail["Sambal"] = sambal * kalori["sambal"]
-detail["Kecap"] = kecap * kalori["kecap"]
+detail["Kecap manis"] = kecap_manis * kalori["kecap_manis"]
 detail["Saos tomat"] = saos * kalori["saos"]
 detail["Chili Oil"] = chili_oil * kalori["chili_oil"]
+detail["Micin"] = micin * kalori["micin"]
+detail["Kecap asin"] = kecap_asin * kalori["kecap_asin"]
+detail["Kuah kaldu ayam"] = kuah * kalori["kuah"]
 
 total = sum(detail.values()) * porsi
 
@@ -188,20 +204,25 @@ rows_all = []
 data_input = [
     (1,"Mie","100 g",100,mie_val/100,detail["Mie"],4.51,25.01,2.06,"E_mie = ∫₀¹⁰⁰ (4P+4K+9L) dx"),
     (2,"Minyak ayam","1 sdm",10,minyak,detail["Minyak ayam"],0.00,0.00,9.98,"E_mb = ∫₀¹⁰ (9L) dx"),
-    (3,"Sawi","1 lembar",20,sawi,detail["Sawi"],0.41,0.96,0.45,"E_sawi = ∫₀²⁰ (4P+4K+9L) dx"),
-    (4,"Daun bawang","1 sdm",10,daun_bawang,detail["Daun bawang"],0.15,1.42,0.03,"E_db = ∫₀¹⁰ (4P+4K+9L) dx"),
-    (5,"Ayam cincang","1 sdm",20,ayam,detail["Ayam cincang"],6.20,0.00,0.71,"E_ac = ∫₀²⁰ (4P+9L) dx"),
-    (6,"Ceker","1 buah",50,ceker,detail["Ceker"],9.70,0.10,7.30,"E_ceker = ∫₀⁵⁰ (4P+4K+9L) dx"),
-    (7,"Bakso","1 buah",30,bakso,detail["Bakso"],4.12,5.17,4.76,"E_bakso = ∫₀³⁰ (4P+4K+9L) dx"),
-    (8,"Telur ayam","1 butir",60,telur_ayam,detail["Telur ayam"],5.51,0.49,4.65,"E_ta = ∫₀⁶⁰ (4P+4K+9L) dx"),
-    (9,"Telur puyuh","1 butir",9,telur_puyuh,detail["Telur puyuh"],1.30,0.04,1.10,"E_tp = ∫₀⁹ (4P+4K+9L) dx"),
-    (10,"Kerupuk pangsit","1 sdm",10,krupuk,detail["Kerupuk pangsit"],1.26,3.05,1.89,"E_kp = ∫₀¹⁰ (4P+4K+9L) dx"),
-    (11,"Bawang goreng","1 sdm",10,bawang,detail["Bawang goreng"],1.00,5.00,3.00,"E_bg = ∫₀¹⁰ (4P+4K+9L) dx"),
-    (12,"Acar","1 sdm",15,acar,detail["Acar"],0.09,0.62,0.03,"E_acar = ∫₀¹⁵ (4P+4K+9L) dx"),
-    (13,"Sambal","1 sdm",10,sambal,detail["Sambal"],0.50,1.50,0.75,"E_sambal = ∫₀¹⁰ (4P+4K+9L) dx"),
-    (14,"Saus tomat","1 sdm",10,saos,detail["Saos tomat"],0.17,2.51,0.04,"E_st = ∫₀¹⁰ (4P+4K+9L) dx"),
-    (15,"Kecap","1 sdm",10,kecap,detail["Kecap"],0.13,7.64,0.00,"E_kecap = ∫₀¹⁰ (4P+4K) dx"),
-    (16,"Chili oil","1 sdm",10,chili_oil,detail["Chili Oil"],0.07,0.30,9.45,"E_co = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (3,"Micin","1 sdt",1,micin,detail["Micin"],0.00,0.00,0.00,"E_micin = ∫₀¹ (0) dx"),
+    (4,"Kecap asin","1 sdm",10,kecap_asin,detail["Kecap asin"],1.00,1.00,0.00,"E_ka = ∫₀¹⁰ (4P+4K) dx"),
+    (5,"Kecap manis","1 sdm",10,kecap_manis,detail["Kecap manis"],0.13,7.64,0.00,"E_km = ∫₀¹⁰ (4P+4K) dx"),
+    (6,"Sawi","1 lembar",20,sawi,detail["Sawi"],0.41,0.96,0.45,"E_sawi = ∫₀²⁰ (4P+4K+9L) dx"),
+    (7,"Daun bawang","1 sdm",10,daun_bawang,detail["Daun bawang"],0.15,1.42,0.03,"E_db = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (8,"Ayam cincang","1 sdm",20,ayam,detail["Ayam cincang"],6.20,0.00,0.71,"E_ac = ∫₀²⁰ (4P+9L) dx"),
+    (9,"Ceker","1 buah",50,ceker,detail["Ceker"],9.70,0.10,7.30,"E_ceker = ∫₀⁵⁰ (4P+4K+9L) dx"),
+    (10,"Bakso","1 buah",30,bakso,detail["Bakso"],4.12,5.17,4.76,"E_bakso = ∫₀³⁰ (4P+4K+9L) dx"),
+    (11,"Telur ayam","1 butir",60,telur_ayam,detail["Telur ayam"],5.51,0.49,4.65,"E_ta = ∫₀⁶⁰ (4P+4K+9L) dx"),
+    (12,"Telur puyuh","1 butir",9,telur_puyuh,detail["Telur puyuh"],1.30,0.04,1.10,"E_tp = ∫₀⁹ (4P+4K+9L) dx"),
+    (13,"Kerupuk pangsit","1 sdm",10,krupuk,detail["Kerupuk pangsit"],1.26,3.05,1.89,"E_kp = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (14,"Bawang goreng","1 sdm",10,bawang,detail["Bawang goreng"],1.00,5.00,3.00,"E_bg = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (15,"Acar","1 sdm",15,acar,detail["Acar"],0.09,0.62,0.03,"E_acar = ∫₀¹⁵ (4P+4K+9L) dx"),
+    (16,"Sambal","1 sdm",10,sambal,detail["Sambal"],0.50,1.50,0.75,"E_sambal = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (17,"Saus tomat","1 sdm",10,saos,detail["Saos tomat"],0.17,2.51,0.04,"E_st = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (18,"Kecap","1 sdm",10,kecap,detail["Kecap"],0.13,7.64,0.00,"E_kecap = ∫₀¹⁰ (4P+4K) dx"),
+    (19,"Chili oil","1 sdm",10,chili_oil,detail["Chili Oil"],0.07,0.30,9.45,"E_co = ∫₀¹⁰ (4P+4K+9L) dx"),
+    (20,"Kuah kaldu ayam","200 ml",200,kuah,detail["Kuah kaldu ayam"],0.80,1.26,0.24,"E_kaldu = ∫₀²⁰⁰ (4P+4K+9L) dx"),
+
 ]
 
 for no,nama,takaran,berat,qty,kal,p,k,l,integral in data_input:
@@ -286,4 +307,6 @@ st.markdown("""
 st.info("Integral digunakan untuk menjumlahkan kontribusi energi secara kontinu berdasarkan massa setiap komponen makanan.")
 
 st.write("---")
-st.caption("✨ Virtual Lab Matematika - Integral Kalori Mie Ayam 🚀")
+st.caption("✨ CalcuBowl - Virtual Lab Matematika")
+st.caption("Disusun oleh Kelompok 3 Offering C")
+st.caption("Erma Nesti Amalia (250311600460) | Fauziah (250311600979) | Hilwaheka Safira (250311601651)")
