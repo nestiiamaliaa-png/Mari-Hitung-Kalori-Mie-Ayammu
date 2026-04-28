@@ -97,7 +97,7 @@ kuah = input_fleksibel("Kuah kaldu ayam (porsi 200 ml)", ["1","2","3","lebih"])
 kalori = {
     "mie": 1.3662,
     "minyak": 89.82,
-    "sawi": 9.52,
+    "sawi": 9.53,
     "daun_bawang": 6.53,
     "ayam": 31.24,
     "ceker": 104.90,
